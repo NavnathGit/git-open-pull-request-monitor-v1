@@ -28,7 +28,8 @@ export ALERT_THRESHOLD_DAYS =1
 
 export GIT_API_URL=https://api.github.com/repos/NavnathGit/DSA-JS/pulls?state=open
 
-export SLACK_WEBHOOK_URL=https://hooks.slack.com/services/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
+please replace XXXXX with Slack webhook token.
+export SLACK_WEBHOOK_URL=https://hooks.slack.com/services/XXXXX
 
 once you set ENV variable run the below command. Downside of this is this will be one time run, it will not run-on regular interval.
 
