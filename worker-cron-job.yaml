@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: git-open-pull-request-monitor
-            image: git-open-pull-request-monitor-slim-v1
+            image: navanthd/git-open-pull-request-monitor:v1
             imagePullPolicy: Never
             env:
             - name: GIT_API_URL

@@ -11,24 +11,24 @@ def get_pull_request_data(api_url, alert_threshold_days):
     older_than_threshold_days = 'NO'
     res = requests.get(api_url)
     res_data = res.json()
+    if (len(res_data)) != 0:
+        for item in res_data:
+            pull_request_datails = {}
+            created_date_time = item['created_at']
+            pull_request_create_date = datetime.fromisoformat(datetime.strptime(
+                created_date_time, "%Y-%m-%dT%H:%M:%SZ").isoformat())
 
-    for item in res_data:
-        pull_request_datails = {}
-        created_date_time = item['created_at']
-        pull_request_create_date = datetime.fromisoformat(datetime.strptime(
-            created_date_time, "%Y-%m-%dT%H:%M:%SZ").isoformat())
+            todays_date = datetime.fromisoformat(
+                datetime.now().replace(microsecond=0).isoformat())
 
-        todays_date = datetime.fromisoformat(
-            datetime.now().replace(microsecond=0).isoformat())
+            if (abs(todays_date - pull_request_create_date).days) >= int(alert_threshold_days):
+                older_than_threshold_days = 'YES'
 
-        if (abs(todays_date - pull_request_create_date).days) >= int(alert_threshold_days):
-            older_than_threshold_days = 'YES'
+            pull_request_datails['html_url'] = item['html_url']
+            pull_request_datails['older_than_threshold'] = older_than_threshold_days
+            pull_request_data.append(pull_request_datails)
 
-        pull_request_datails['html_url'] = item['html_url']
-        pull_request_datails['older_than_threshold'] = older_than_threshold_days
-        pull_request_data.append(pull_request_datails)
-
-    return pull_request_data
+        return pull_request_data
 
 
 def contains_old_pull_request(pull_req_data):
@@ -87,12 +87,17 @@ if __name__ == '__main__':
     slack_webhook_url = os.environ.get('SLACK_WEBHOOK_URL')
     alert_threshold_days = os.environ.get('ALERT_THRESHOLD_DAYS')
 
-    pull_req_data = get_pull_request_data(git_api_url, alert_threshold_days)
-
-    old_pull_request = contains_old_pull_request(pull_req_data)
-    get_pull_request_links(pull_req_data)
-
-    if old_pull_request:
-        post_message_on_slack(slack_webhook_url, pull_req_data)
+    if git_api_url and slack_webhook_url and alert_threshold_days:
+        pull_req_data = get_pull_request_data(
+            git_api_url, alert_threshold_days)
+        if pull_req_data:
+            old_pull_request = contains_old_pull_request(pull_req_data)
+            if old_pull_request:
+                post_message_on_slack(slack_webhook_url, pull_req_data)
+            else:
+                print('No pending pull request found older than threshold')
+        else:
+            print(
+                'Open pull request threshold has not reached or no open pull requests pending for approval')
     else:
-        print('No pending pull request found older than 3 Days')
+        print('Please provide all requred parameters')
