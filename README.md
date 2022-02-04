@@ -49,6 +49,8 @@ kubectl apply -f worker-cron-job.yaml
 
 On successful Run:  Message will be posted on Slack channel.  
 
+![image](https://user-images.githubusercontent.com/87501404/152604267-3ff5d482-8c85-4ade-a439-44b1df7f1353.png)
+
 Security: 
 
 Slack webhook URL is stored in either ENV variable or Secret variable based on how we decide to run the job. Web hook URL is encrypted in Kubernetes secret.
