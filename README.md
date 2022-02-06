@@ -6,13 +6,13 @@ If you don’t want to download source code, you can download readymade image fr
 
 https://hub.docker.com/repository/docker/navanthd/git-open-pull-request-monitor
 
-Image: navanthd/git-open-pull-request-monitor:v1
+Image: navanthd/git-open-pull-request-monitor:v2
 
 
 Step 2:  Skip this step if you download the in-built image 
-Open Terminal on your machine, navigate to the folder where you have kept source code from above repository 
+Open Terminal on your machine, navigate to the folder where you have kept source code from above repository. Run below command to buuild new image. 
 
-docker build -t git-open-pull-request-monitor-slim-v1 .
+docker build -t git-open-pull-request-monitor:v1 .
 
 Step 3: 
 
@@ -33,8 +33,7 @@ export SLACK_WEBHOOK_URL=https://hooks.slack.com/services/XXXXX
 
 once you set ENV variable run the below command. Downside of this is this will be one time run, it will not run-on regular interval.
 
-docker run --env GIT_API_URL --env SLACK_WEBHOOK_URL --env ALERT_THRESHOLD_DAYS --name=pull-request-monitor_container-v1 git-open-pull-request-monitor-slim-v1
-
+docker run --env GIT_API_URL --env SLACK_WEBHOOK_URL --env ALERT_THRESHOLD_DAYS --name=pull-request-monitor_container-v2 git-open-pull-request-monitor:v2
 
 Other option could be pass environment variables using Config Map and Secret. Please modify the config map and secret yaml file as per your need.
 
