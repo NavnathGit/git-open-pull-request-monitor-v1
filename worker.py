@@ -100,4 +100,4 @@ if __name__ == '__main__':
             print(
                 'Open pull request threshold has not reached or no open pull requests pending for approval')
     else:
-        print('Please provide all requred parameters')
+        print('Please provide all required parameters')
